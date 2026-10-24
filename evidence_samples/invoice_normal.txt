@@ -1,0 +1,22 @@
+INVOICE INV-4471
+==========================================
+From:  Meridian Freight Ltd
+       14 Quayside, Rotterdam
+To:    Northwind Logistics
+       Unit 7, Felixstowe
+
+Description
+------------------------------------------
+Freight services, Rotterdam to Felixstowe
+Container 40ft, 2 units
+
+Subtotal:            11,000.00
+VAT (20%):            2,200.00
+------------------------------------------
+Total amount due:  USD 12,000.00
+
+Payment details
+------------------------------------------
+IBAN: GB29NWBK60161331926819
+Reference: INV-4471
+Due date: 30 days from issue

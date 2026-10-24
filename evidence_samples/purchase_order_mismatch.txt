@@ -1,0 +1,15 @@
+PURCHASE ORDER PO-88214
+==========================================
+Buyer:  Northwind Logistics
+Vendor: Meridian Freight Ltd
+
+This order authorises freight services, Rotterdam
+to Felixstowe, container 40ft, 2 units.
+
+Agreed contract value: USD 19,000.00
+Approved by: J. Whitfield, Procurement
+
+Payment to be made against invoice reference
+INV-4471 on satisfactory delivery.
+
+Account on file: GB29NWBK60161331926819

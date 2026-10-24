@@ -1,0 +1,11 @@
+# Credentials — never commit. .env holds the Airwallex sandbox key.
+.env
+*.env
+!.env.example
+
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+demo_last_run.json
