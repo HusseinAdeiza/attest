@@ -70,7 +70,7 @@ Case A / Case C distinction.
 **Stored output:** `docs/evidence/tests-run.txt`
 
 ```
-63 passed
+75 passed
 ```
 
 | File | Tests | What it covers |
@@ -79,6 +79,39 @@ Case A / Case C distinction.
 | `tests/test_extractor_regression.py` | 15 | the amount-extraction bugs that shipped, pinned |
 | `tests/test_gate.py` | 14 | all four outcomes, and the four cases where the gate must REFUSE to act |
 | `tests/test_analyst_extract.py` | 13 | citation discipline — a claim with no citation is discarded |
+| `tests/test_falsification.py` | 12 | **properties that would prove the scorer WRONG** — see below |
+
+### The falsification suite
+
+The first four files assert that the scorer matches the decisions it was designed
+to produce. **That is consistency, not correctness** — grading a scorer against
+its own spec measures nothing an outsider should trust.
+
+`tests/test_falsification.py` is written the other way round. Each test states a
+property that must hold for *any* correct implementation, derives the expected
+answer independently of `src/evidence/score.py`, then asks the scorer. **If the
+scorer is wrong, these fail.**
+
+| Property | Statement |
+|---|---|
+| Monotonicity | adding a corroborating source may never *lower* authority, at any amount |
+| Scale invariance | scaling all figures by 1000× changes nothing; the cap is proportional, not absolute |
+| Independence | a source asserting nothing cannot corroborate; two documents of the same origin are not independent |
+| Boundary | the tolerance edge is asserted from **both sides**, and its asymmetry is explained |
+| Refusal safety | an unverifiable source cannot authorise, cannot corroborate a real one, and a stale one carries less authority |
+
+**The meta-test:** `test_these_tests_can_actually_fail` asserts the harness is
+live — a deliberately wrong expectation must raise. A falsification suite that
+cannot fail is decoration.
+
+**What the falsification suite found while being written:** the tolerance is
+**1% of the larger claimed figure**, and the larger figure *moves with the
+difference* — so the boundary is a fixed point, not a constant. For a 12,000
+instruction the upward edge is **121.21** and the downward edge is **120.00**.
+That asymmetry is correct: when a second source claims more, the figure it is
+measured against is its own. **The test was wrong, not the scorer** — and
+asserting both edges now means a future change to the tolerance model cannot
+quietly move them.
 
 ---
 
@@ -224,6 +257,12 @@ distinct.
   `test_a_hallucinated_claim_cannot_change_the_decision`
 - The gate acting on an assessment it cannot read — covered by four tests that
   assert it raises instead
+- Adding corroborating evidence lowering authority — covered by
+  `test_adding_a_corroborating_source_never_lowers_authority`
+- An empty document counting as a corroborating source — covered by
+  `test_a_source_with_no_facts_cannot_corroborate`
+- Two copies of one document manufacturing authority — covered by
+  `test_two_sources_of_the_same_origin_are_not_independent`
 
 **What would NOT break it, but should concern a reader:** the thresholds in
 limitation 4 are chosen to be defensible, not fitted. A different reviewer could
