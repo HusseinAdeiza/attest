@@ -1,0 +1,61 @@
+ATTEST — the agent's spending authority scales with the evidence
+rail: mock   (live payments are NOT verified — see README)
+──────────────────────────────────────────────────────────────────────────
+instruction (IDENTICAL in all four cases):
+  pay 12000.00 USD to Meridian Freight Ltd
+  account GB29NWBK60161331926819   reference INV-4471
+──────────────────────────────────────────────────────────────────────────
+
+CASE A — CORROBORATED — pays in full, no human
+  what changed : the invoice plus the purchase order that authorised it
+  evidence read: invoice_normal.txt, purchase_order.txt
+      invoice_normal.txt   amount          = USD 12,000.00
+      purchase_order.txt   amount          = USD 12,000.00
+      purchase_order.txt   reference       = PO-88214
+  -> AUTHORISE  (CORROBORATED)
+  -> PAID 12000.00 USD   ref MOCKPAY-0001
+     · corroboration from 2 independent origin(s)
+
+CASE B — SINGLE SOURCE — pays, but capped at a quarter
+  what changed : the same invoice, with the purchase order removed
+  evidence read: invoice_normal.txt
+      invoice_normal.txt   amount          = USD 12,000.00
+  -> AUTHORISE_CAPPED  (SINGLE_SOURCE)
+  -> PAID 3000.00 USD   ref MOCKPAY-0002
+     · corroboration from 1 independent origin(s)
+     · uncorroborated: capped at 25% of requested
+
+CASE C — CONTRADICTED — a human must decide
+  what changed : a purchase order stating a different total
+  evidence read: invoice_normal.txt, purchase_order_mismatch.txt
+      invoice_normal.txt   amount          = USD 12,000.00
+      purchase_order_mismatch.txt amount          = USD 19,000.00
+      purchase_order_mismatch.txt reference       = PO-88214
+  -> ESCALATE  (CONTRADICTED)
+  -> no money moved; sent for human approval (MOCKAPPR-0003)
+     · sources disagree on amount: 12000.00 vs 19000.00
+
+CASE D — UNVERIFIABLE — refused, and recorded as refused
+  what changed : an email asking for payment, with no supporting document
+  evidence read: email_unverified.txt (UNVERIFIABLE)
+      email_unverified.txt amount          = USD 12,000.00
+  -> REFUSE  (UNVERIFIABLE_ORIGIN)
+  -> no money moved
+     · 1 source(s) unverifiable — ignored
+     · no usable evidence was offered
+
+──────────────────────────────────────────────────────────────────────────
+LEDGER — every decision, including the refusals
+──────────────────────────────────────────────────────────────────────────
+  INV-4471   PAID                          12000.00  CORROBORATED           corroboration from 2 independent origin(s)
+  INV-4471   PAID (capped)      3000.00 of 12000.00  SINGLE_SOURCE          capped at 3000.00 of 12000.00 requested; corroboration from 1 independent origin(s); uncorroborated: capped at 25% of requested
+  INV-4471   ESCALATED                0 of 12000.00  CONTRADICTED           sources disagree on amount: 12000.00 vs 19000.00
+  INV-4471   REFUSED                  0 of 12000.00  UNVERIFIABLE_ORIGIN    1 source(s) unverifiable — ignored; no usable evidence was offered
+──────────────────────────────────────────────────────────────────────────
+  paid             15000.00 USD
+  refused          12000.00 USD (no payment attempted)
+  escalated        12000.00 USD (awaiting a human)
+  withheld by cap  9000.00 USD (paid in part because evidence was thin)
+──────────────────────────────────────────────────────────────────────────
+
+The instruction never changed. The evidence did.
