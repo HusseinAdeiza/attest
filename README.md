@@ -52,6 +52,29 @@ notice:**
   (pixel changes, cross-checked against the demo's own timestamps), so no
   caption claims anything the footage does not show at that instant.
 
+## Setup
+
+Python 3.11+ and nothing else — the core, tests, and demo are stdlib-only.
+
+```bash
+git clone <this repository>
+cd attest
+python3 -m venv .venv && source .venv/bin/activate   # optional but recommended
+python3 -m pytest tests/ -q                          # 75 tests, ~0.2s
+ATTEST_PACE=0 python3 -m src.demo.run_demo           # the demo, no credentials
+```
+
+Optional — the Airwallex sandbox rail activates only when both are set
+(`.env`, never committed; see `.env.example`):
+
+```
+AWX_CLIENT_ID=...   # from the sandbox dashboard, Managers → API keys
+AWX_API_KEY=...     # scoped key: Payments + Beneficiaries only
+```
+
+With no credentials the demo runs the mock rail and **prints that it has done
+so** — a run can never silently claim a live payment it did not make.
+
 ## The demo
 
 ```bash
