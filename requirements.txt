@@ -1,0 +1,16 @@
+# ATTEST — install requirements
+#
+# The runtime core and the demo are stdlib-only (Python 3.11+): no install is
+# needed to run the demo or to read the code. This file exists for the TEST
+# suite only — `pip install -r requirements.txt` pulls the single test
+# dependency.
+#
+#   python3 -m pytest tests/ -q        after: pip install pytest
+#
+# The Airwallex sandbox rail (src/rails/payment.py) deliberately uses
+# urllib from the standard library, so no HTTP package is required and no
+# credential-handling code depends on third-party versions.
+#
+# Nothing here pins a transitive tree: one direct dependency, deliberately.
+
+pytest>=8.0

@@ -54,14 +54,15 @@ notice:**
 
 ## Setup
 
-Python 3.11+ and nothing else — the core, tests, and demo are stdlib-only.
+Python 3.11+. **The demo runs on the standard library alone** — no install
+step needed. Only the test suite needs one package:
 
 ```bash
 git clone <this repository>
 cd attest
-python3 -m venv .venv && source .venv/bin/activate   # optional but recommended
-python3 -m pytest tests/ -q                          # 75 tests, ~0.2s
-ATTEST_PACE=0 python3 -m src.demo.run_demo           # the demo, no credentials
+python3 -m src.demo.run_demo                     # the demo, no installs, no credentials
+pip install -r requirements.txt                  # pulls pytest (the only dependency)
+python3 -m pytest tests/ -q                      # 75 tests, ~0.2s
 ```
 
 Optional — the Airwallex sandbox rail activates only when both are set
