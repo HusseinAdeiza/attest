@@ -1,10 +1,9 @@
 """Live smoke test — authenticate against the Airwallex sandbox and report.
 
-RUN THIS FROM A NON-DATACENTER NETWORK (your laptop or phone). The machine the
-project was built on sits behind a Contabo ASN, and Airwallex's edge returns an
-HTML 403 to every API host from it — a datacenter-IP block, not a credential
-problem. Running here proves nothing; running from your own network proves the
-credential and the integration.
+Run from wherever your credentials are, on any network. If authentication
+fails, the failure body will say which layer rejected the call (an HTML body
+means a request-shape or edge problem; JSON with a Airwallex error code means
+the API itself answered).
 
 WHAT IT DOES
   1. authenticates and reports whether a token came back

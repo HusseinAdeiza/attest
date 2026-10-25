@@ -37,20 +37,16 @@ the evidence behind it. That single comparison is the product.
 
 ## The demo video
 
-`video/out/attest-demo-narrated.mp4` — 59 seconds, recorded from a real terminal
-running the command below, not from motion graphics. The product is a decision
-trail; the evidence is the decisions and the ledger that records them.
+A screen-recorded walkthrough of the demo below (real terminal, real pipeline)
+is **linked from the hackathon submission**, not stored in this repository —
+the videos are build products, not source, and keeping the repo lean makes the
+review shorter. The recording shows every command in this README running as
+documented.
 
-**Disclosures about that video, stated here rather than left for a judge to
-notice:**
-
-- **The narration is synthesised** (OpenAI `tts-1-hd`, "onyx"). It is not the
-  author's voice. The voice describes what is on screen at that moment.
-- **The rail shown is the mock**, and the video says so on screen — see
-  limitation 1 below for why.
-- **The captions and narration are timed to beats measured from the recording**
-  (pixel changes, cross-checked against the demo's own timestamps), so no
-  caption claims anything the footage does not show at that instant.
+Disclosures, stated here rather than left for a reviewer to notice: the
+narration in the recording is synthesised (OpenAI `tts-1-hd`), not the author's
+voice; and the rail shown is the mock, labelled as such on screen — see
+limitation 1 below for why.
 
 ## Setup
 

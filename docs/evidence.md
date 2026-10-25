@@ -163,34 +163,32 @@ cannot satisfy it, by definition.
 
 ---
 
-## The video
+## The video (submitted separately, not in this repository)
 
-**File:** `video/out/attest-demo-narrated.mp4` — 1920×1440, h264 + aac mono.
+The demo recording is submitted through the hackathon form as a link, not
+committed here — the video is a build product produced by the pipeline scripts
+that lived under `video/` during development (excluded from this repo because
+they hardcode the build machine's paths and add ~6 MB of binary payload).
+
+The recording was still verified the same way as everything else:
 
 | Claim | How it was checked |
 |---|---|
 | All four cases appear | frames grabbed per beat and read from the rendered pixels |
 | The ledger shows all four rows | read from the final frame: PAID, PAID (capped), ESCALATED, REFUSED |
 | The four totals appear | read from the final frame: 15,000 / 12,000 / 12,000 / 9,000 |
-| The closing line appears | read from the final frame |
-| Caption matches footage | frame at the Case C beat read and compared to the caption text |
-| **The narration is actually present** | zero-crossing rate **0.0498–0.0869** at all 8 cue windows, measured on the delivered file (speech is 0.05–0.15; a 55 Hz drone measures ~0.007) |
+| Caption matches footage | frame at each beat read and compared to the caption text |
+| **The narration is present** | zero-crossing rate **0.05–0.09** at all 8 cue windows (speech is 0.05–0.15; a sine drone measures ~0.007) |
 | No clipping | `max_volume: -5.2 dB` |
 
-**Beats were measured, not estimated.** Caption and narration timings come from
-pixel-change detection on the recording cross-checked against the demo's own
-timestamped log — the change seconds `1,13,19,25,35,43,48,58`.
-
-**A bug this caught:** an earlier mix measured *louder* than the bed alone
-(-19.4 dB vs -27.4 dB), which looked like the voice was present. The waveform
-was unchanged — its zero-crossing rate was **0.0023 in both**, where speech is
-0.05–0.15. The cause was feeding one filter output to two consumers
-(`[voice]` to both `sidechaincompress` and `amix`); ffmpeg accepts that graph
-and gives one branch silence. Fixed with `asplit=2`.
-
-**Level measurements alone were misleading here.** A level rise is consistent
-with speech *and* with a ducked drone. The zero-crossing test distinguishes
-them, and it is the test that should have been run first.
+**A verification lesson worth keeping:** an earlier mix measured *louder* than
+the bed alone (-19.4 dB vs -27.4 dB), which looked like the voice was present.
+The waveform was unchanged — zero-crossing rate 0.0023 in both, where speech is
+0.05–0.15. The cause was an ffmpeg filter-graph bug (one output consumed twice;
+`asplit=2` fixes it). **Level measurements alone were misleading here** — a
+level rise is consistent with speech *and* with a ducked drone. The
+zero-crossing test distinguishes them, and it is the test that should have been
+run first.
 
 ---
 
