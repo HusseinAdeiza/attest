@@ -9,3 +9,9 @@ __pycache__/
 venv/
 .pytest_cache/
 demo_last_run.json
+
+# video artifacts: the deliverable mp4s are external links, QC frames are
+# 29 MB of test noise. Keep the pipeline scripts, not their products.
+video/takes/
+video/qc/
+video/out/narration_cues/
